@@ -1,0 +1,49 @@
+.header{
+    background-color: black;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.header__logo {
+    width: 100px;
+    margin-top: 2px;
+    margin-left: -1300px;
+    margin-right: 20px;
+}
+
+.header__link{
+    color: white;
+    text-decoration: none;
+}
+
+.header__nav{
+    display: flex;
+    justify-content: space-evenly;
+    margin-left: 600px;
+    /* flex: 1; */
+}
+
+.header__option{
+    /* width: 100px; */
+    margin-top: -70px;
+    display: flex;
+    flex-direction: column;
+    /* margin-left: 100px; */
+    
+}
+
+.header__optionLineOne{
+    font-size: 30px;
+    font-weight: 800px;
+    margin-left: 50px;
+
+}
+.header__optionLineTwo{
+    font-size: 30px;
+    font-weight: 800px;
+}
+
+.header__optionLineThree{
+    font-size: 30px;
+    /* font-weight: 800px; */
+}
