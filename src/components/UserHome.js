@@ -17,16 +17,21 @@ export default class UserHome extends Component {
         currentUser:{posts:[]},
         posts:[],
         listOfFriends:[],
-        postComments:[]
+        postComments:[],
+        editPostContent:"",
+        currentPostId: 0
     }
 
     componentDidMount(){
         fetch(`http://localhost:3000/api/v1/users/${localStorage.userID}`) //${localStorage.userID}
         .then(resp => resp.json())
-        .then(user => this.setState({
-            currentUser: user
+        .then(user => { 
+            this.setState({
+                currentUser: user
+            })
 
-        }))
+        })
+            
     }
 
     handlePostSubmit = (event) =>{
@@ -54,14 +59,6 @@ export default class UserHome extends Component {
         event.target.reset()
     }
 
-    handleUserMessage = () =>{
-        console.log('Messages!!!!')
-        fetch(urlMessage)
-        .then(resp => resp.json())
-        .then(console.log)
-    }
-
-    
     handleUserFriendship = ()=>{
         fetch(`http://localhost:3000/api/v1/users/${localStorage.userID}`) //${localStorage.userID}
         .then(reps => reps.json())
@@ -82,9 +79,9 @@ export default class UserHome extends Component {
     }
 
     handlePostDelete = (postId) =>{
-        console.log(postId)
+        // console.log(postId)
         let updatedPosts = this.state.currentUser.posts.filter( post => post.id !==postId)
-        console.log('I have been deleted')
+        // console.log('I have been deleted')
         fetch(urlPost+postId, {method:"DELETE"})
         this.setState({
             currentUser: {
@@ -94,22 +91,41 @@ export default class UserHome extends Component {
         })
     }
 
-    handlePostEdit = (postId) => {
-        console.log('I have been edited')
-        console.log(postId)
-        fetch(urlPost+postId, {
+    handlePostEdit = (e) => {
+        e.preventDefault();
+        
+        // console.log(e.target.textarea.value)
+        // console.log("Enter submit form")
+        let postId = this.state.currentPostId
+
+        fetch(`${urlPost}${this.state.currentPostId}`, {
             method: "PATCH",
             headers:{
                 "Content-type": "Application/json",
                 "Accepts": "Applications/json"
             },
             body: JSON.stringify({
-                description: {}
+                description: this.state.editPostContent
             })
         })
         .then(resp => resp.json())
-        .then(console.log)
+        .then(editedPost => this.setState({
+            currentUser: {
+                ...this.state.currentUser,
+                posts: [...this.state.currentUser.posts.map(post => post.id !== editedPost.id ? post : editedPost)]
+            } 
+        }))
+        e.target.reset()
     }
+
+    handleDisplayPostTobeEdited = (post) =>{
+        this.setState({
+            ...this.state,
+            editPostContent: post.description,
+            currentPostId: post.id
+        })
+    }
+
 
     showPostComment = (postId) =>{
         console.log(postId)
@@ -120,8 +136,15 @@ export default class UserHome extends Component {
         }))
     }
 
+    handleUserMessage = () =>{
+        // console.log('Messages!!!!')
+        fetch(urlMessage)
+        .then(resp => resp.json())
+        .then(console.log)
+    }
 
     render() {
+        // console.log(this.state.currentUser)
         return (
             <div>
                 <h1>Welcome: {this.state.currentUser.username}</h1>
@@ -140,14 +163,18 @@ export default class UserHome extends Component {
                     {this.state.currentUser.posts.map((post) => 
                     <UserPostCard
                      handleDelete={this.handlePostDelete} 
-                     handleEdit={this.handlePostEdit}
+                     handleDisplayPostTobeEdited={this.handleDisplayPostTobeEdited}
                      key={post.id} 
-                     description={post.description} 
-                     postId={post.id}
+                     post ={post}
                      showPostComment={this.showPostComment}/>)} 
                 </div>
                 </Card.Group>
-
+                       <form onSubmit={(e) => this.handlePostEdit(e)}>
+                        <textarea name="textarea" value={this.state.editPostContent} 
+                        onChange={(e) => this.setState({...this.state, editPostContent: e.target.value})} > 
+                        </textarea>  
+                        <button>Submit</button>   
+                        </form> 
                 <div>
                     <h2 onClick={this.handleUserMessage}>Message</h2>
                 </div>
