@@ -50,6 +50,9 @@ class LogIn extends Component {
 
                         <center>
                             <button type="submit" className="login__login">Login</button><br></br>
+                            <Link to="/signup">
+                                <button type="submit" className= "login__signup">Or Sign up</button><br></br>
+                            </Link>
                             <Link to="/">
                                 <button type="submit" className="login__homepage">Back to Home page</button>
                             </Link>

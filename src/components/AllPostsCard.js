@@ -9,7 +9,8 @@ export default class AllPostsCard extends Component {
             <div>
                 <Card>
                     {this.props.post.description}<button onClick={() => this.props.showPostComment(postId)} >Show comments</button>
-                    {/* {this.props.comment.content} */}
+                    {/* {this.props.comment === 0 ? "This post has no comment" : this.props.comment} */}
+                    
                 </Card>
             </div>
         )

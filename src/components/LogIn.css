@@ -44,6 +44,16 @@
 
 }
 
+.login__signup{
+    background-color:blue;
+    border: none;
+    color: #ffff;
+    border-radius: 2px;
+    width: 301px;
+    margin-top: 10px;
+    cursor: pointer;
+    height: 42px;
+}
 .login__homepage{
     background-color:blue;
     border: none;

@@ -4,7 +4,8 @@ import { Card } from 'semantic-ui-react'
 import FriendshipCard from './FriendshipCard'
 import AllPostsCard from "./AllPostsCard"
 import MessageCard from "./MessageCard"
-
+import CommunityMembers from "./CommunityMembers"
+import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom"
 
 const UsersUrl = "http://localhost:3000/api/v1/users"
 const urlPost = "http://localhost:3000/api/v1/posts/"
@@ -14,14 +15,27 @@ const urlAllPost = "http://localhost:3000/api/v1/posts"
 
 export default class UserHome extends Component {
     state = {
+        // currentUser:{
+        //     // posts:[],
+        //     friends: [],
+        //     comments: []
+        // },
+        // posts:[],
+        // // listOfFriends:[],
+        // // postComments:[],
+        // comments: [],
+        // editPostContent:"",
+        // currentPostId: 0,  ==>> , friends:[] to be inserted in currentUser next to post
         currentUser:{posts:[]},
         posts:[],
         listOfFriends:[],
         postComments:[],
         editPostContent:"",
-        currentPostId: 0
+        currentPostId: 0,
+        comMembers: []
     }
 
+    
     componentDidMount(){
         fetch(`http://localhost:3000/api/v1/users/${localStorage.userID}`) //${localStorage.userID}
         .then(resp => resp.json())
@@ -29,9 +43,7 @@ export default class UserHome extends Component {
             this.setState({
                 currentUser: user
             })
-
-        })
-            
+        })    
     }
 
     handlePostSubmit = (event) =>{
@@ -42,7 +54,7 @@ export default class UserHome extends Component {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
-                "accepts": "application/jons"
+                "accepts": "application/json"
             },
             body: JSON.stringify({
                 user_id: localStorage.userID,
@@ -59,7 +71,7 @@ export default class UserHome extends Component {
         event.target.reset()
     }
 
-    handleUserFriendship = ()=>{
+    handleUserFriendship = () => {
         fetch(`http://localhost:3000/api/v1/users/${localStorage.userID}`) //${localStorage.userID}
         .then(reps => reps.json())
         .then(userData => this.setState({
@@ -72,8 +84,7 @@ export default class UserHome extends Component {
         fetch(urlAllPost)
         .then(resp => resp.json())
         .then(posts => this.setState({
-           posts,
-           
+           posts,  
         }
         ))
     }
@@ -102,7 +113,7 @@ export default class UserHome extends Component {
             method: "PATCH",
             headers:{
                 "Content-type": "Application/json",
-                "Accepts": "Applications/json"
+                "Accepts": "Application/json"
             },
             body: JSON.stringify({
                 description: this.state.editPostContent
@@ -136,17 +147,58 @@ export default class UserHome extends Component {
         }))
     }
 
-    handleUserMessage = () =>{
-        // console.log('Messages!!!!')
-        fetch(urlMessage)
-        .then(resp => resp.json())
-        .then(console.log)
+    // handleUserMessage = () =>{
+    //     // console.log('Messages!!!!')
+    //     fetch('https://data.montgomerycountymd.gov/resource/y636-7qmd.json')
+    //     .then(resp => resp.json())
+    //     .then(console.log)
+    // }
+
+    handleComMembers = () =>{
+        fetch(UsersUrl)
+        .then(reps => reps.json())
+        .then(membersList =>  
+            this.setState({
+            comMembers: membersList
+        })) 
     }
 
+    addFriend = (event, friend) => {
+        event.preventDefault()
+        // console.log(friend.id)
+        // console.log(this.state.currentUser.id)
+        fetch('http://localhost:3000/api/v1/friendships', {
+            method: "POST",
+            headers:{
+                "Content-type": "Application/json",
+                "Accepts": "Application/json"
+            },
+            body: JSON.stringify({friendship: {
+                user_id: this.state.currentUser.id,
+                friend_id: friend.id
+            }})
+        })
+        .then(resp => resp.json())
+        .then(data => this.setState({
+            listOfFriends: [...this.state.listOfFriends, friend]
+        })  )
+    }
+    
+    sendMessage = (event, message, member) => {
+        event.preventDefault()
+        console.log(event, message)
+        //fetch POST to messagesURL sender_id:this.state.currentUser.id, receiver_id: member.id, content: message.content
+    }
+
+    // handlePublicApi = () =>{
+
+    // }
+
     render() {
-        // console.log(this.state.currentUser)
         return (
+            
             <div>
+                {/* <UserHomeNavBar /> */}
                 <h1>Welcome: {this.state.currentUser.username}</h1>
         
                 <h2>Make a new post</h2>
@@ -181,10 +233,14 @@ export default class UserHome extends Component {
 
                 <div>
                     <h2 onClick={this.handleUserFriendship}>List of Friends</h2>
-                    {this.state.listOfFriends.length>0 ? this.state.listOfFriends.map(friend => 
-                    <FriendshipCard friend={friend}
-                    key={friend.id}/>): "You have no friends right now" }
+                    {this.state.listOfFriends.length > 0 ? this.state.listOfFriends.map(friend => 
+                    <FriendshipCard friend={friend} key={friend.id}/>) : "You have no friends right now" }
                 </div>
+
+                <div>
+                    <h2 onClick={this.handleComMembers}>Community Members </h2>
+                    { this.state.comMembers.map(member => <CommunityMembers member={member} addFriend={this.addFriend}/> )}
+                </div> 
 
                 <div>
                     <h2 onClick={this.handleAllPost}>All Posts</h2>
@@ -194,9 +250,10 @@ export default class UserHome extends Component {
                     postId={post.id} 
                     showPostComment={this.showPostComment}
                     />) }
-                    {/* {this.state.postComments.length > 0 ? this.state.postComments.map(comment => <AllPostsCard comment={comment}/>): "This post has no comment yet!!"} */}
+                    {/* {this.state.postComments.length >= 1 ? this.state.postComments.map(comment => <AllPostsCard comment={comment}/>): null} */}
                 </div>
             </div>
+           
         )
     }
 }

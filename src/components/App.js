@@ -9,6 +9,7 @@ import Footer from "./Footer"
 import configObj from "./configObj"
 import Home from "./Home"
 import UserHome from "./UserHome"
+// import UserHomeNavBar from"./UserHomeNavBar"
 
 
 const UsersUrl = "http://localhost:3000/api/v1/users"
@@ -17,6 +18,13 @@ class App extends Component {
   state = {
     loggedIn: false,
     currentUser: {}
+  }
+  componentDidMount() {
+    if(localStorage.token) {
+      this.setState({
+        loggedIn: true
+      })
+    }
   }
 
   handleLogin = (event, user) => {
@@ -27,7 +35,6 @@ class App extends Component {
     .then((response) => response.json())
     .then((data) => {
       localStorage.token = data.token
-      localStorage.userName = data.user.username
       localStorage.userID = data.user.id
       this.setState({ loggedIn: true });
       })
@@ -41,40 +48,56 @@ class App extends Component {
     fetch(UsersUrl, configObj("POST", false, {user: { username, password }}))
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
-      localStorage.token = data.token
-      // localStorage.userName = data.user.username
-      // localStorage.userID = data.user.id
-      this.setState({ loggedIn: true });
+      //console.log(data.error)
+      if(data.error)
+        alert(data.error)
+      else{
+        localStorage.token = data.token
+        localStorage.userID = data.user.id
+        this.setState({ loggedIn: true });
+      }
       })
     .catch((error) => alert(error));
-   
   };
-    
+  
+  logOut = (event) =>{
+    event.preventDefault();
+    localStorage.clear();
+    this.setState({
+      loggedIn: false
+    },
+    alert("Successul logout!"));
+  };
+
+
 
   render(){
     return (
       <Router>
       <div className="app">
-        {/* <Navbar/> */}
+        <Navbar loggedIn={this.state.loggedIn} logOut={this.logOut}/>
         <Switch>
+          <Route exact path="/" component={Home}/>
         
           <Route path="/signup" render={(routeProps) => (this.state.loggedIn) ? <Redirect to="/home"/> :
-          <SignUp handleRegister={this.handleRegister} {...routeProps} />} >
-          </Route>
+            <SignUp handleRegister={this.handleRegister} {...routeProps} />} />
+          {/* </Route> */}
 
-          <Route path="/login" render={(routeProps) => (this.state.loggedIn) ? <Redirect to="/home"/> :
-          <LogIn handleLogin={this.handleLogin} {...routeProps} />} >
-          </Route>
+          <Route exact path="/login" render={(routeProps) => (this.state.loggedIn) ? <Redirect to="/home"/> :
+            <LogIn handleLogin={this.handleLogin} {...routeProps} />} />
 
-          <Route exact path="/">
-          <Navbar/>
-          <Home />
-          </Route>
+          <Route exact path='/home' render={(routeProps) => (this.state.loggedIn)
+          ? <UserHome logOut={this.logOut} {...routeProps}/>
+          : <Redirect to='/login' />}/>
+              
+          {/* </Route> */}
 
-          <Route path="/home" component={UserHome}>
-            {/* <UserHome /> */}
-          </Route>
+            {/* <Navbar/> */}
+            {/* <Home />
+          </Route> */}
+
+            {/* <UserHome /> don't use it*/} 
+          {/* </Route> */}
           
         </Switch>
         <Footer/>

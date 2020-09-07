@@ -26,8 +26,22 @@ class SignUp extends Component {
             <div className="signup">
                 <div className="signup__container">
                     <h2>New user signup</h2>
-                    <form onSubmit={(event) => this.handleSubmit(event)}>
+                    <form onSubmit={(event) => {
+                        event.preventDefault()
+                        if(this.state.username === "")//if empty, can also add more validation here
+                            this.setState({usernameError: "Cannot be blank"})
+                        else
+                            this.setState({usernameError: ""})
+                        if(this.state.password === "")
+                            this.setState({passwordError: "Cannot be blank"})
+                        else 
+                            this.setState({passwordError: ""})
+
+                        if(this.state.username !== "" && this.state.password !== "")
+                            this.handleSubmit(event)                        
+                        }}>
                         <label htmlFor='username'>Username</label>
+                       <p>{this.state.usernameError}</p>
                         <center>
                             <input 
                             name="username" 
@@ -39,6 +53,7 @@ class SignUp extends Component {
                         {/* <br></br> */}
 
                         <label htmlFor='password'>Password</label>
+                        <p>{this.state.passwordError}</p>
                         <center>
                             <input 
                             name="password" 
