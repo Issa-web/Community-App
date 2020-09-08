@@ -6,6 +6,8 @@ import AllPostsCard from "./AllPostsCard"
 import MessageCard from "./MessageCard"
 import CommunityMembers from "./CommunityMembers"
 import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom"
+import "./UserHome.css"
+import FriendContainer from "./FriendContainer"
 
 const UsersUrl = "http://localhost:3000/api/v1/users"
 const urlPost = "http://localhost:3000/api/v1/posts/"
@@ -84,10 +86,14 @@ export default class UserHome extends Component {
         fetch(urlAllPost)
         .then(resp => resp.json())
         .then(posts => this.setState({
-           posts,  
-        }
-        ))
+            posts,  
+         }) )
     }
+    /*
+    posts => 
+        console.log(posts[2].comments[0].content)
+    */
+
 
     handlePostDelete = (postId) =>{
         // console.log(postId)
@@ -147,6 +153,10 @@ export default class UserHome extends Component {
         }))
     }
 
+    makeNewComment = (postId)=>{
+        console.log("Make a new Commment")
+        console.log(postId)
+    }
     // handleUserMessage = () =>{
     //     // console.log('Messages!!!!')
     //     fetch('https://data.montgomerycountymd.gov/resource/y636-7qmd.json')
@@ -165,8 +175,6 @@ export default class UserHome extends Component {
 
     addFriend = (event, friend) => {
         event.preventDefault()
-        // console.log(friend.id)
-        // console.log(this.state.currentUser.id)
         fetch('http://localhost:3000/api/v1/friendships', {
             method: "POST",
             headers:{
@@ -190,19 +198,15 @@ export default class UserHome extends Component {
         //fetch POST to messagesURL sender_id:this.state.currentUser.id, receiver_id: member.id, content: message.content
     }
 
-    // handlePublicApi = () =>{
-
-    // }
 
     render() {
         return (
-            
-            <div>
-                {/* <UserHomeNavBar /> */}
+            <React.Fragment >
+            <div className="user-homepage">
                 <h1>Welcome: {this.state.currentUser.username}</h1>
         
                 <h2>Make a new post</h2>
-                <div>
+                <div className="user-homepage-form1">
                     <form onSubmit={(event) => this.handlePostSubmit(event)}>
                     <input type="text_area" placeholder="post" name="post" type="text" ></input>
                     <button type="submit">Submit your post</button>
@@ -210,7 +214,7 @@ export default class UserHome extends Component {
                 </div>
                 
                 <Card.Group itemsPerRow={6}>
-                <div>
+                <div className="user-post">
                     <h2>Your Posts</h2>
                     {this.state.currentUser.posts.map((post) => 
                     <UserPostCard
@@ -231,29 +235,37 @@ export default class UserHome extends Component {
                     <h2 onClick={this.handleUserMessage}>Message</h2>
                 </div>
 
-                <div>
+                <div className="user-list-of-friends">
                     <h2 onClick={this.handleUserFriendship}>List of Friends</h2>
                     {this.state.listOfFriends.length > 0 ? this.state.listOfFriends.map(friend => 
                     <FriendshipCard friend={friend} key={friend.id}/>) : "You have no friends right now" }
                 </div>
 
-                <div>
+                <div className="user-community-members">
                     <h2 onClick={this.handleComMembers}>Community Members </h2>
                     { this.state.comMembers.map(member => <CommunityMembers member={member} addFriend={this.addFriend}/> )}
                 </div> 
 
-                <div>
+                <div className="user-all-posts">
                     <h2 onClick={this.handleAllPost}>All Posts</h2>
                     {this.state.posts.map(post => 
                     <AllPostsCard post={post} 
                     key={post.id} 
                     postId={post.id} 
-                    showPostComment={this.showPostComment}
-                    />) }
-                    {/* {this.state.postComments.length >= 1 ? this.state.postComments.map(comment => <AllPostsCard comment={comment}/>): null} */}
+                    showPostComment={this.showPostComment} 
+                    makeNewComment ={this.makeNewComment}/>) }
                 </div>
             </div>
-           
+
+            <div className="ui vertical segment compact raised segments">
+            <div className="ui segment inverted">
+                    <h2>Welcome home, {this.state.currentUser.username}</h2>
+            </div>
+            <div className='ui vertical segment'>
+              <FriendContainer listOfFriends={this.state.listOfFriends}/>
+            </div>
+          </div>
+          </React.Fragment>
         )
     }
 }

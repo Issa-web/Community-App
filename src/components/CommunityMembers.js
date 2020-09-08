@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import "./CommunityMembers.css"
 import { Card } from 'semantic-ui-react'
 export default class CommunityMembers extends Component {
     render() {

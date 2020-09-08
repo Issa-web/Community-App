@@ -9,7 +9,7 @@ export default class Footer extends Component {
                 <div className='privacy-statement'>
                     <NavLink to='/'><p>All rights reserved; Privacy Statement</p></NavLink>
                 </div>
-                <div>
+                <div className='privacy-statement'>
                     <a href='' target="_blank" rel="noopener noreferrer" className='made-by'>
                     <p className='made-by'> APP NAME</p></a>
                 </div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Card } from 'semantic-ui-react'
 
 const urlPost = "http://localhost:3000/api/v1/posts/"
+
 export default class PostCard extends Component {
    
     render() {

@@ -3,21 +3,6 @@ import User from "./User"
 
 class Users extends Component {
 
-    // state ={
-    //     users:{}
-    // }
-    
-    // componentDidMount(){
-    //     fetch(UsersUrl)
-    //     .then(resp => resp.json())
-    //     .then(usersData => {
-    //         this.setState({
-    //             users: usersData
-    //         })
-    //     })
-    // }
-
-
     render(){
         return (
             <div>

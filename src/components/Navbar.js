@@ -17,11 +17,6 @@ function Navbar( props ) {
                     </div>
                 </Link>
 
-                {/* <Link to="/signup" className="header__link">
-                    <div className="header__option">
-                        <span  className="header__optionLineTwo">SignUp</span>
-                    </div>
-                </Link> */}
                 {props.loggedIn ? (<button onClick={props.logOut}>
                 <Link to="/" className="header__link" >
                     <div className="header__option">

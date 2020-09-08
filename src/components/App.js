@@ -10,6 +10,7 @@ import configObj from "./configObj"
 import Home from "./Home"
 import UserHome from "./UserHome"
 // import UserHomeNavBar from"./UserHomeNavBar"
+import App2 from './App2';
 
 
 const UsersUrl = "http://localhost:3000/api/v1/users"
@@ -78,6 +79,7 @@ class App extends Component {
         <Navbar loggedIn={this.state.loggedIn} logOut={this.logOut}/>
         <Switch>
           <Route exact path="/" component={Home}/>
+          <Route exact path='/app2' component ={App2}/>
         
           <Route path="/signup" render={(routeProps) => (this.state.loggedIn) ? <Redirect to="/home"/> :
             <SignUp handleRegister={this.handleRegister} {...routeProps} />} />
