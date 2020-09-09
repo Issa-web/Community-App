@@ -62,71 +62,7 @@ const HomepageHeading = ({ mobile }) => (
   </Container>
 );
 
-HomepageHeading.propTypes = {
-  mobile: PropTypes.bool
-};
-
-/* Heads up!
- * Neither Semantic UI nor Semantic UI React offer a responsive navbar, however, it can be implemented easily.
- * It can be more complicated, but you can create really flexible markup.
- */
-
-const UsersUrl = "http://localhost:3000/api/v1/users"
 class DesktopContainer extends Component {
-    state = {
-        loggedIn: false,
-        currentUser: {}
-    }
-
-    componentDidMount() {
-        if(localStorage.token) {
-          this.setState({
-            loggedIn: true
-          })
-        }
-    }
-
-    handleLogin = (event, user) => {
-        console.log(user);
-        event.preventDefault();
-        const { username, password } = user;
-        fetch('http://localhost:3000/api/v1/login', configObj("POST", true, {username, password}))
-        .then((response) => response.json())
-        .then((data) => {
-          localStorage.token = data.token
-          localStorage.userID = data.user.id
-          this.setState({ loggedIn: true });
-          })
-        .catch((error) => alert(error));
-      };
-    
-      handleRegister = (event, newUser) => {
-        event.preventDefault();
-        const { username, password } = newUser;
-    
-        fetch(UsersUrl, configObj("POST", false, {user: { username, password }}))
-        .then((response) => response.json())
-        .then((data) => {
-          //console.log(data.error)
-          if(data.error)
-            alert(data.error)
-          else{
-            localStorage.token = data.token
-            localStorage.userID = data.user.id
-            this.setState({ loggedIn: true });
-          }
-          })
-        .catch((error) => alert(error));
-      };
-      
-      logOut = (event) =>{
-        event.preventDefault();
-        localStorage.clear();
-        this.setState({
-          loggedIn: false
-        },
-        alert("Successul logout!"));
-      };
 
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
@@ -136,27 +72,6 @@ class DesktopContainer extends Component {
     const { fixed } = this.state;
 
     return (
-    <Router>
-      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-          <Switch>
-        <Visibility
-          once={false}
-          onBottomPassed={this.showFixedMenu}
-          onBottomPassedReverse={this.hideFixedMenu}
-        >
-
-        <Route exact path="/" component={Home}/>
-        
-        <Route path="/signup" render={(routeProps) => (this.state.loggedIn) ? <Redirect to="/home"/> :
-        <SignUp handleRegister={this.handleRegister} {...routeProps} />} />
-        
-
-        <Route exact path="/login" render={(routeProps) => (this.state.loggedIn) ? <Redirect to="/home"/> :
-        <LogIn handleLogin={this.handleLogin} {...routeProps} />} />
-
-        <Route exact path='/home' render={(routeProps) => (this.state.loggedIn)
-        ? <UserHome logOut={this.logOut} {...routeProps}/>
-        : <Redirect to='/login' />}/>
 
           <Segment
             inverted
@@ -205,13 +120,7 @@ class DesktopContainer extends Component {
                 </Menu.Item>
               </Container>
             </Menu>
-            <HomepageHeading />
           </Segment>
-        </Visibility>
-          </Switch>
-        {children}
-      </Responsive>
-      </Router>
     );
   }
 }

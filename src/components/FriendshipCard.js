@@ -5,9 +5,9 @@ export default class FriendshipCard extends Component {
     render() {
         return (
             <div>
-               <Card>
+               {/* <Card>
                    {this.props.friend.username}
-                </Card> 
+                </Card>  */}
             </div>
         )
     }

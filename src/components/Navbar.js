@@ -1,9 +1,26 @@
 import React from 'react'
 import './Navbar.css';
 import { Link } from "react-router-dom"
+import {
+    Button,
+    Container,
+    Divider,
+    Grid,
+    Header,
+    Icon,
+    Image,
+    List,
+    Menu,
+    Responsive,
+    Segment,
+    Sidebar,
+    Visibility
+  } from "semantic-ui-react";
 
 function Navbar( props ) {
     return (
+
+
         <nav className="header">
             <img 
                 className="header__logo"
@@ -31,6 +48,7 @@ function Navbar( props ) {
                 </Link>)}
             </div>
         </nav>
+    
     )
 }
 

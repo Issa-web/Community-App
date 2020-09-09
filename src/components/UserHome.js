@@ -74,20 +74,32 @@ export default class UserHome extends Component {
     }
 
     handleUserFriendship = () => {
+        if(this.state.listOfFriends.length > 0){
+            this.setState({
+                listOfFriends: []
+            })
+        }
+        else{
         fetch(`http://localhost:3000/api/v1/users/${localStorage.userID}`) //${localStorage.userID}
         .then(reps => reps.json())
         .then(userData => this.setState({
             listOfFriends: userData.friends
-        }))
+        }))}  
     }
    
     handleAllPost = () =>{
-        console.log("All posts")
-        fetch(urlAllPost)
-        .then(resp => resp.json())
-        .then(posts => this.setState({
-            posts,  
-         }) )
+        if(this.state.posts.length > 0){
+            this.setState({
+                posts: []
+        })
+    }else{
+            // console.log("All posts")
+            fetch(urlAllPost)
+            .then(resp => resp.json())
+            .then(posts => this.setState({
+                posts,  
+             }) )
+        }
     }
     /*
     posts => 
@@ -130,7 +142,8 @@ export default class UserHome extends Component {
             currentUser: {
                 ...this.state.currentUser,
                 posts: [...this.state.currentUser.posts.map(post => post.id !== editedPost.id ? post : editedPost)]
-            } 
+            },
+            editPostContent:""
         }))
         e.target.reset()
     }
@@ -159,18 +172,25 @@ export default class UserHome extends Component {
     }
     // handleUserMessage = () =>{
     //     // console.log('Messages!!!!')
-    //     fetch('https://data.montgomerycountymd.gov/resource/y636-7qmd.json')
+    //     fetch('https://data.montgomerycountymd.gov/resource/weic-kzbi.json')
     //     .then(resp => resp.json())
     //     .then(console.log)
     // }
 
     handleComMembers = () =>{
+        if(this.state.comMembers.length > 0){
+            this.setState({
+                comMembers: []
+        })
+    } else{
         fetch(UsersUrl)
         .then(reps => reps.json())
         .then(membersList =>  
             this.setState({
             comMembers: membersList
         })) 
+
+    }
     }
 
     addFriend = (event, friend) => {
@@ -200,6 +220,8 @@ export default class UserHome extends Component {
 
 
     render() {
+
+        
         return (
             <React.Fragment >
             <div className="user-homepage">
@@ -208,11 +230,20 @@ export default class UserHome extends Component {
                 <h2>Make a new post</h2>
                 <div className="user-homepage-form1">
                     <form onSubmit={(event) => this.handlePostSubmit(event)}>
-                    <input type="text_area" placeholder="post" name="post" type="text" ></input>
-                    <button type="submit">Submit your post</button>
+                    <textarea type="text_area" placeholder="Post here" name="post" type="text" rows="3"></textarea>
+                    <button class="ui green button" type="submit">Submit your post</button>
                     </form>
                 </div>
                 
+                </div>
+                     <form onSubmit={(e) => this.handlePostEdit(e)}>
+                     <textarea name="textarea" type="text_area" type="text" rows="3" value={this.state.editPostContent} 
+                      onChange={(e) => this.setState({...this.state, editPostContent: e.target.value})} > 
+                     </textarea>  
+                     <button class="ui green button" type="submit" >Submit</button>   
+                    </form> 
+                <div>
+    
                 <Card.Group itemsPerRow={6}>
                 <div className="user-post">
                     <h2>Your Posts</h2>
@@ -223,30 +254,35 @@ export default class UserHome extends Component {
                      key={post.id} 
                      post ={post}
                      showPostComment={this.showPostComment}/>)} 
-                </div>
-                </Card.Group>
-                       <form onSubmit={(e) => this.handlePostEdit(e)}>
-                        <textarea name="textarea" value={this.state.editPostContent} 
-                        onChange={(e) => this.setState({...this.state, editPostContent: e.target.value})} > 
-                        </textarea>  
-                        <button>Submit</button>   
-                        </form> 
-                <div>
                     <h2 onClick={this.handleUserMessage}>Message</h2>
                 </div>
+                </Card.Group>
 
                 <div className="user-list-of-friends">
-                    <h2 onClick={this.handleUserFriendship}>List of Friends</h2>
-                    {this.state.listOfFriends.length > 0 ? this.state.listOfFriends.map(friend => 
-                    <FriendshipCard friend={friend} key={friend.id}/>) : "You have no friends right now" }
+                    {/* <h2 onClick={this.handleUserFriendship}>List of Friends</h2> */}
+                    {/* {this.state.listOfFriends.length > 0 ? this.state.listOfFriends.map(friend => 
+                    <FriendshipCard friend={friend} key={friend.id}/>) : "You have no friends right now" } */}
+                </div>
+                
+                <div className="ui vertical segment compact raised segments">
+                    <div className="ui segment inverted">
+                    <h2 onClick={this.handleUserFriendship} >List of friends</h2>
+                    </div>
+                    <div className='ui vertical segment'>
+                    <FriendContainer listOfFriends={this.state.listOfFriends}/>
+                    </div>
                 </div>
 
-                <div className="user-community-members">
+
+                <div className="ui vertical segment compact raised segments">
+                    <div className="ui segment inverted">   
                     <h2 onClick={this.handleComMembers}>Community Members </h2>
                     { this.state.comMembers.map(member => <CommunityMembers member={member} addFriend={this.addFriend}/> )}
+                    </div>
                 </div> 
 
-                <div className="user-all-posts">
+                <div className="ui vertical segment compact raised segments">
+                    <div className="ui segment inverted"> 
                     <h2 onClick={this.handleAllPost}>All Posts</h2>
                     {this.state.posts.map(post => 
                     <AllPostsCard post={post} 
@@ -254,17 +290,21 @@ export default class UserHome extends Component {
                     postId={post.id} 
                     showPostComment={this.showPostComment} 
                     makeNewComment ={this.makeNewComment}/>) }
+                    </div>
                 </div>
             </div>
 
-            <div className="ui vertical segment compact raised segments">
-            <div className="ui segment inverted">
-                    <h2>Welcome home, {this.state.currentUser.username}</h2>
-            </div>
-            <div className='ui vertical segment'>
-              <FriendContainer listOfFriends={this.state.listOfFriends}/>
-            </div>
-          </div>
+           
+            {/* <div className="ui vertical segment compact raised segments">
+                <div className="ui segment inverted">
+                <h2>Welcome home, {this.state.currentUser.username}</h2>
+                </div>
+                <div className='ui vertical segment'>
+                <FriendContainer listOfFriends={this.state.listOfFriends}/>
+                </div>
+            </div> */}
+
+
           </React.Fragment>
         )
     }

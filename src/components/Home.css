@@ -4,3 +4,22 @@
     height: 300;
     
 }
+.message {
+    background-color: #eeeeee;
+    box-shadow: none;
+    border-radius: 0;
+    margin-bottom: 4rem;
+    padding-top: 6rem;
+    padding-bottom: 4rem;
+  }
+  .header__home{
+    background-color: #eeeeee;  
+  }
+
+  .container__home{
+      display: flex;
+      align-items: center;
+      margin-right: 500px;
+      margin-left: -100px;
+      justify-content: space-evenly
+  }
