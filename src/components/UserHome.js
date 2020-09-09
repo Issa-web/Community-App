@@ -244,8 +244,9 @@ export default class UserHome extends Component {
                     </form> 
                 <div>
     
-                <Card.Group itemsPerRow={6}>
-                <div className="user-post">
+                <div>
+            
+                {/* <div className="user-post">
                     <h2>Your Posts</h2>
                     {this.state.currentUser.posts.map((post) => 
                     <UserPostCard
@@ -255,8 +256,8 @@ export default class UserHome extends Component {
                      post ={post}
                      showPostComment={this.showPostComment}/>)} 
                     <h2 onClick={this.handleUserMessage}>Message</h2>
-                </div>
-                </Card.Group>
+                </div> */}
+                
 
                 <div className="user-list-of-friends">
                     {/* <h2 onClick={this.handleUserFriendship}>List of Friends</h2> */}
@@ -264,24 +265,76 @@ export default class UserHome extends Component {
                     <FriendshipCard friend={friend} key={friend.id}/>) : "You have no friends right now" } */}
                 </div>
                 
-                <div className="ui vertical segment compact raised segments">
-                    <div className="ui segment inverted">
+                {/* <div >
+                    <div >
                     <h2 onClick={this.handleUserFriendship} >List of friends</h2>
                     </div>
-                    <div className='ui vertical segment'>
+                    <div >
                     <FriendContainer listOfFriends={this.state.listOfFriends}/>
                     </div>
-                </div>
+                </div> */}
 
 
-                <div className="ui vertical segment compact raised segments">
+                <div class="ui four column grid">
+                    <div class="row">
+                        <div class="column">
+                        <div className="ui segment inverted">
+                            <h2 onClick={this.handleUserFriendship} >List of friends</h2>
+                            </div>
+                            <div >
+                            <FriendContainer listOfFriends={this.state.listOfFriends}/>
+                            </div>
+                        </div>
+                        <div class="column">
+                        <div className="ui segment inverted">   
+                            <h2 onClick={this.handleComMembers}>Community Members </h2>
+                            { this.state.comMembers.map(member => <CommunityMembers member={member} addFriend={this.addFriend}/> )}
+                        </div>
+                        </div>
+                        <div class="column">
+                        <div className="ui segment inverted"> 
+                            <h2 onClick={this.handleAllPost}>All Posts</h2>
+                            {this.state.posts.map(post => 
+                            <AllPostsCard post={post} 
+                            key={post.id} 
+                            postId={post.id} 
+                            showPostComment={this.showPostComment} 
+                            makeNewComment ={this.makeNewComment}/>) }
+                        </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div className="ui segment inverted">
+                            <h2>Your Posts</h2>
+                            {this.state.currentUser.posts.map((post) => 
+                            <UserPostCard
+                            handleDelete={this.handlePostDelete} 
+                            handleDisplayPostTobeEdited={this.handleDisplayPostTobeEdited}
+                            key={post.id} 
+                            post ={post}
+                            showPostComment={this.showPostComment}/>)} 
+                       </div>
+                    </div>
+                    <div class="column">
+                        <div className="ui segment inverted">
+                             <h2 onClick={this.handleUserMessage}>Message</h2>
+                        </div>
+                    </div>
+                    <div class="column"></div>
+                    <div class="column"></div>
+                    </div> 
+
+
+
+
+                {/* <div className="ui vertical segment compact raised segments">
                     <div className="ui segment inverted">   
                     <h2 onClick={this.handleComMembers}>Community Members </h2>
                     { this.state.comMembers.map(member => <CommunityMembers member={member} addFriend={this.addFriend}/> )}
                     </div>
-                </div> 
+                </div>  */}
 
-                <div className="ui vertical segment compact raised segments">
+                {/* <div className="ui vertical segment compact raised segments">
                     <div className="ui segment inverted"> 
                     <h2 onClick={this.handleAllPost}>All Posts</h2>
                     {this.state.posts.map(post => 
@@ -291,6 +344,7 @@ export default class UserHome extends Component {
                     showPostComment={this.showPostComment} 
                     makeNewComment ={this.makeNewComment}/>) }
                     </div>
+                </div> */}
                 </div>
             </div>
 
@@ -304,8 +358,9 @@ export default class UserHome extends Component {
                 </div>
             </div> */}
 
-
           </React.Fragment>
+
+
         )
     }
 }
