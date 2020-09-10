@@ -22,17 +22,20 @@ function Navbar( props ) {
 
 
         <nav className="header">
+            <Link to="/" className="header__link">
+
             <img 
                 className="header__logo"
                 src="https://www.crossed-flag-pins.com/Friendship-Pins/Mali/Flag-Pins-Mali-USA.jpg"
                 alt=""
             />
+            </Link>
             <div className="header__nav">
-                <Link to="/" className="header__link">
-                    <div className="header__option">
+                {/* <Link to="/" className="header__link"> */}
+                    {/* <div className="header__option">
                         <span className="header__optionLineOne">Welcome</span>
-                    </div>
-                </Link>
+                    </div> */}
+                {/* </Link> */}
 
                 {props.loggedIn ? (<button onClick={props.logOut}>
                 <Link to="/" className="header__link" >

@@ -45,5 +45,6 @@
 
 .header__optionLineThree{
     font-size: 30px;
+    margin-right: -400px;
     /* font-weight: 800px; */
 }

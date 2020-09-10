@@ -15,7 +15,7 @@ export default class Footer extends Component {
                 </div>
                 <div> 
                     <button>
-                        Github icon/link<a href='' target="_blank" rel="noopener noreferrer"></a>
+                        Github<a href='https://github.com/Issa-web' target="_blank" rel="noopener noreferrer"></a>
                     </button>
                 </div>
             </div>

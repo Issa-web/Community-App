@@ -23,3 +23,7 @@
       margin-left: -100px;
       justify-content: space-evenly
   }
+  
+  .user-form{
+      display: inline;
+  }

@@ -22,6 +22,7 @@ class LogIn extends Component {
 
     render(){
         return (
+            
             <div className="login">
                 <div className="login__container">
                     <h2>User log in</h2>
@@ -54,13 +55,14 @@ class LogIn extends Component {
                                 <button type="submit" className= "login__signup">Or Sign up</button><br></br>
                             </Link>
                             <Link to="/">
-                                <button type="submit" className="login__homepage">Back to Home page</button>
+                                <button type="submit" className="login__homepage">Home page</button>
                             </Link>
                         </center>
                     </form>
 
                 </div>
             </div>
+            
         )
     }
 }

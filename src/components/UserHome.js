@@ -34,7 +34,9 @@ export default class UserHome extends Component {
         postComments:[],
         editPostContent:"",
         currentPostId: 0,
-        comMembers: []
+        comMembers: [],
+        show: false,
+        show1: false
     }
 
     
@@ -45,7 +47,7 @@ export default class UserHome extends Component {
             this.setState({
                 currentUser: user
             })
-        })    
+        }) 
     }
 
     handlePostSubmit = (event) =>{
@@ -101,11 +103,23 @@ export default class UserHome extends Component {
              }) )
         }
     }
-    /*
-    posts => 
-        console.log(posts[2].comments[0].content)
-    */
+    
+    handleUserPost = () =>{
 
+    //     if(this.state.currentUser.posts.length > 0){
+    //         this.setState({
+    //             currentUser: {
+    //                 ...this.state.currentUser,
+    //             posts: this.state.currentUser.posts
+    //             }
+    //     })
+    // }
+    // else{
+    //     this.setState({
+    //         currentUser: {posts:[...this.state.currentUser.posts]}
+    //      })
+    //     }
+    }
 
     handlePostDelete = (postId) =>{
         // console.log(postId)
@@ -143,7 +157,7 @@ export default class UserHome extends Component {
                 ...this.state.currentUser,
                 posts: [...this.state.currentUser.posts.map(post => post.id !== editedPost.id ? post : editedPost)]
             },
-            editPostContent:""
+            editPostContent:"",
         }))
         e.target.reset()
     }
@@ -152,7 +166,8 @@ export default class UserHome extends Component {
         this.setState({
             ...this.state,
             editPostContent: post.description,
-            currentPostId: post.id
+            currentPostId: post.id,
+            show1: !this.state.show1
         })
     }
 
@@ -220,64 +235,41 @@ export default class UserHome extends Component {
 
 
     render() {
-
         
         return (
             <React.Fragment >
             <div className="user-homepage">
                 <h1>Welcome: {this.state.currentUser.username}</h1>
-        
-                <h2>Make a new post</h2>
-                <div className="user-homepage-form1">
-                    <form onSubmit={(event) => this.handlePostSubmit(event)}>
-                    <textarea type="text_area" placeholder="Post here" name="post" type="text" rows="3"></textarea>
-                    <button class="ui green button" type="submit">Submit your post</button>
-                    </form>
-                </div>
+                    <div className="user-form">
+                        <h2 onClick={() => this.setState({show: !this.state.show})}>Make a new post</h2><br></br>
+                        { this.state.show ?
+                            <div className="user-homepage-form1">
+                                <form onSubmit={(event) => this.handlePostSubmit(event)} >
+                                <textarea type="text_area" placeholder="Post here" name="post" type="text" rows="3"></textarea>
+                                <button className="ui green button" type="submit">Submit  your  post</button>
+                                </form>
+                            </div>
+                            : null
+                        }
+                    </div>
                 
-                </div>
-                     <form onSubmit={(e) => this.handlePostEdit(e)}>
+                <div>
+                <div>
+                {this.state.show1 ?
+                     <form onSubmit={(e) => this.handlePostEdit(e)}  >
                      <textarea name="textarea" type="text_area" type="text" rows="3" value={this.state.editPostContent} 
                       onChange={(e) => this.setState({...this.state, editPostContent: e.target.value})} > 
                      </textarea>  
-                     <button class="ui green button" type="submit" >Submit</button>   
+                     <button className="ui green button" type="submit" >Submit Edited post</button>   
                     </form> 
-                <div>
-    
-                <div>
-            
-                {/* <div className="user-post">
-                    <h2>Your Posts</h2>
-                    {this.state.currentUser.posts.map((post) => 
-                    <UserPostCard
-                     handleDelete={this.handlePostDelete} 
-                     handleDisplayPostTobeEdited={this.handleDisplayPostTobeEdited}
-                     key={post.id} 
-                     post ={post}
-                     showPostComment={this.showPostComment}/>)} 
-                    <h2 onClick={this.handleUserMessage}>Message</h2>
-                </div> */}
-                
-
-                <div className="user-list-of-friends">
-                    {/* <h2 onClick={this.handleUserFriendship}>List of Friends</h2> */}
-                    {/* {this.state.listOfFriends.length > 0 ? this.state.listOfFriends.map(friend => 
-                    <FriendshipCard friend={friend} key={friend.id}/>) : "You have no friends right now" } */}
+                    : null
+                }
                 </div>
-                
-                {/* <div >
-                    <div >
-                    <h2 onClick={this.handleUserFriendship} >List of friends</h2>
-                    </div>
-                    <div >
-                    <FriendContainer listOfFriends={this.state.listOfFriends}/>
-                    </div>
-                </div> */}
+            
 
-
-                <div class="ui four column grid">
-                    <div class="row">
-                        <div class="column">
+                <div className="ui four column grid">
+                    <div className="row">
+                        <div className="column">
                         <div className="ui segment inverted">
                             <h2 onClick={this.handleUserFriendship} >List of friends</h2>
                             </div>
@@ -285,13 +277,13 @@ export default class UserHome extends Component {
                             <FriendContainer listOfFriends={this.state.listOfFriends}/>
                             </div>
                         </div>
-                        <div class="column">
+                        <div className="column">
                         <div className="ui segment inverted">   
                             <h2 onClick={this.handleComMembers}>Community Members </h2>
                             { this.state.comMembers.map(member => <CommunityMembers member={member} addFriend={this.addFriend}/> )}
                         </div>
                         </div>
-                        <div class="column">
+                        <div className="column">
                         <div className="ui segment inverted"> 
                             <h2 onClick={this.handleAllPost}>All Posts</h2>
                             {this.state.posts.map(post => 
@@ -303,9 +295,9 @@ export default class UserHome extends Component {
                         </div>
                         </div>
                     </div>
-                    <div class="column">
+                    <div className="column">
                         <div className="ui segment inverted">
-                            <h2>Your Posts</h2>
+                            <h2 onClick={this.handleUserPost}>Your Posts</h2>
                             {this.state.currentUser.posts.map((post) => 
                             <UserPostCard
                             handleDelete={this.handlePostDelete} 
@@ -315,51 +307,18 @@ export default class UserHome extends Component {
                             showPostComment={this.showPostComment}/>)} 
                        </div>
                     </div>
-                    <div class="column">
+                    <div className="column">
                         <div className="ui segment inverted">
                              <h2 onClick={this.handleUserMessage}>Message</h2>
                         </div>
                     </div>
-                    <div class="column"></div>
-                    <div class="column"></div>
+                    <div className="column"></div>
+                    <div className="column"></div>
                     </div> 
-
-
-
-
-                {/* <div className="ui vertical segment compact raised segments">
-                    <div className="ui segment inverted">   
-                    <h2 onClick={this.handleComMembers}>Community Members </h2>
-                    { this.state.comMembers.map(member => <CommunityMembers member={member} addFriend={this.addFriend}/> )}
-                    </div>
-                </div>  */}
-
-                {/* <div className="ui vertical segment compact raised segments">
-                    <div className="ui segment inverted"> 
-                    <h2 onClick={this.handleAllPost}>All Posts</h2>
-                    {this.state.posts.map(post => 
-                    <AllPostsCard post={post} 
-                    key={post.id} 
-                    postId={post.id} 
-                    showPostComment={this.showPostComment} 
-                    makeNewComment ={this.makeNewComment}/>) }
-                    </div>
-                </div> */}
                 </div>
             </div>
 
-           
-            {/* <div className="ui vertical segment compact raised segments">
-                <div className="ui segment inverted">
-                <h2>Welcome home, {this.state.currentUser.username}</h2>
-                </div>
-                <div className='ui vertical segment'>
-                <FriendContainer listOfFriends={this.state.listOfFriends}/>
-                </div>
-            </div> */}
-
           </React.Fragment>
-
 
         )
     }

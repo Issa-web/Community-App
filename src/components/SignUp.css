@@ -1,5 +1,5 @@
 .signup{
-    background-color: rgba(255, 0, 43, 0.931) ;
+    background-color: blue ;
     height: 100vh;
     align-items: center;
     display:flex ;
@@ -32,7 +32,7 @@
 }
 
 .signup__signup{
-    background-color:rgba(255, 0, 43, 0.931);
+    background-color:blue;
     border: none;
     color: #ffff;
     border-radius: 2px;
@@ -44,7 +44,7 @@
 }
 
 .signup__homepage{
-    background-color:rgba(255, 0, 43, 0.931);
+    background-color: blue;
     border: none;
     color: #ffff;
     border-radius: 2px;
