@@ -1,5 +1,7 @@
 Community-App Backend: https://github.com/Issa-web/Community-App-backend
 
+![Community App Demo](Community App.gif)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
