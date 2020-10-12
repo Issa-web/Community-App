@@ -1,3 +1,6 @@
+A Web Application built for Malian community in the DMV (DC, Virginia and Maryland) region, where they get together, look for place to rent, find out volunteers or mentors 
+
+
 ## Community-App Backend: https://github.com/Issa-web/Community-App-backend
 
 ![Community App Demo](Community.gif)
